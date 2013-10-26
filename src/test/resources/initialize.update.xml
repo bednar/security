@@ -1,0 +1,19 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="1" author="Jakub Bednář">
+        <insert tableName="People">
+            <column name="id" value="1"/>
+            <column name="account" value="people1"/>
+            <column name="password" value="$shiro1$SHA-256$500000$xAHJjbBFcsnwM9aNGJPHyQ==$xaku8hQ1a5G1GkRlUhNUEh+AEdSdPIkmGNSr8PZ2iTQ="/>
+        </insert>
+        <insert tableName="People">
+            <column name="id" value="2"/>
+            <column name="account" value="people2"/>
+            <column name="password" value="$shiro1$SHA-256$500000$/DY7zSdSWyXV7KP4fpLUHQ==$/u/+oPLmG9C/ItlsJDon4ud1vRcwAuv+VWTfDI6YTJQ="/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
