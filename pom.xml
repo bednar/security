@@ -79,4 +79,14 @@
 
     </dependencies>
 
+    <repositories>
+
+        <repository>
+            <id>snapshots-github</id>
+            <name>Snapshots GitHub</name>
+            <url>http://nexus-bednar.rhcloud.com/nexus/content/repositories/snapshots-github/</url>
+        </repository>
+
+    </repositories>
+
 </project>
