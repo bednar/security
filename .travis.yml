@@ -3,9 +3,9 @@ language: java
 jdk:
 - oraclejdk7
 
-install: ''
+install: 'mvn dependency:resolve -U'
 
-script: 'mvn clean install deploy --settings src/main/config/travis-maven-settings.xml -U'
+script: 'mvn clean install deploy --settings src/main/config/travis-maven-settings.xml'
 
 env:
   global:
