@@ -5,5 +5,6 @@ package com.github.bednar.security.aspect;
  */
 public class AspectHelper
 {
+    public static Integer saveCall = 0;
     public static Integer listCall = 0;
 }
