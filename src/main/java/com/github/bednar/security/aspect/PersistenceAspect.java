@@ -53,6 +53,25 @@ public class PersistenceAspect
         return ret;
     }
 
+    @Pointcut("execution(public * com.github.bednar.persistence.inject.service.Database.Transaction+.delete(..))")
+    public void delete()
+    {
+    }
+
+    @Around("delete()")
+    public Object delete(ProceedingJoinPoint point) throws Throwable
+    {
+        LOG.info("Before delete: {}", point.getSignature());
+
+        Object ret = point.proceed();
+
+        LOG.info("After delete: {}", point.getSignature());
+
+        AspectHelper.deleteCall += 1;
+
+        return ret;
+    }
+
     @Pointcut("execution(public * com.github.bednar.persistence.inject.service.Database.Transaction+.list(..))")
     public void list()
     {

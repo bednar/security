@@ -1,6 +1,7 @@
 package com.github.bednar.security.aspect;
 
 import com.github.bednar.base.event.Dispatcher;
+import com.github.bednar.persistence.event.DeleteEvent;
 import com.github.bednar.persistence.event.ListEvent;
 import com.github.bednar.persistence.event.ReadEvent;
 import com.github.bednar.persistence.event.SaveEvent;
@@ -50,7 +51,22 @@ public class PersistenceAspectTest extends AbstractSecurityTest
         dispatcher.publish(new SaveEvent(people));
         dispatcher.publish(new ReadEvent<>(people.getId(), People.class));
 
-        Assert.assertEquals((Integer) (calls + 1), AspectHelper.saveCall);
+        Assert.assertEquals((Integer) (calls + 1), AspectHelper.readCall);
+    }
+
+    @Test
+    public void delete()
+    {
+        Integer calls = AspectHelper.deleteCall;
+
+        People people = new People();
+        people.setAccount("delete_aspect");
+        people.setPassword("my_super_secret");
+
+        dispatcher.publish(new SaveEvent(people));
+        dispatcher.publish(new DeleteEvent(people));
+
+        Assert.assertEquals((Integer) (calls + 1), AspectHelper.deleteCall);
     }
 
     @Test
