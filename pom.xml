@@ -65,6 +65,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Build -->
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${dependency.aspectj.version}</version>
+        </dependency>
+
         <!-- Tests -->
 
         <dependency>
@@ -80,6 +88,41 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <executions>
+
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <testAspectDirectory>src/main/java</testAspectDirectory>
+                            <includes>
+                                <include>**/PersistenceAspect.java</include>
+                            </includes>
+                            <weaveDependencies>
+                                <weaveDependency>
+                                    <groupId>com.github.bednar</groupId>
+                                    <artifactId>persistence</artifactId>
+                                </weaveDependency>
+                            </weaveDependencies>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
 
     <repositories>
 
