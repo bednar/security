@@ -46,6 +46,7 @@ public class AuthenticateViaFormSubscriber extends AbstractSubscriber<Authentica
             event.getSource().success(false);
 
             LOG.error("[error-authentication]", au);
+            LOG.error("[error-cause][{}][{}]", au.getMessage(), au.getCause());
         }
     }
 }
