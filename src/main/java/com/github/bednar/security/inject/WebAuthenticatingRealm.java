@@ -101,6 +101,8 @@ public class WebAuthenticatingRealm extends AuthenticatingRealm
                 List<Resource> accounts = transaction.list(Restrictions.eq("account", account), type);
                 if (accounts.isEmpty())
                 {
+                    LOG.error("[empty-account][{}][{}]", account, accounts.size());
+
                     return null;
                 }
                 else if (accounts.size() > 1)
