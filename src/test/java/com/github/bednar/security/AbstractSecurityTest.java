@@ -18,7 +18,7 @@ public abstract class AbstractSecurityTest
     protected static Injector injector;
 
     @BeforeClass
-    public static void before() throws Exception
+    public static void beforeClass() throws Exception
     {
         embeddedJetty = new EmbeddedJetty()
                 .webFragments(true)
@@ -28,7 +28,7 @@ public abstract class AbstractSecurityTest
     }
 
     @AfterClass
-    public static void after() throws Exception
+    public static void afterClass() throws Exception
     {
         embeddedJetty.stop();
     }

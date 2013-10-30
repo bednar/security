@@ -34,6 +34,25 @@ public class PersistenceAspect
         return ret;
     }
 
+    @Pointcut("execution(public * com.github.bednar.persistence.inject.service.Database.Transaction+.read(..))")
+    public void read()
+    {
+    }
+
+    @Around("read()")
+    public Object read(ProceedingJoinPoint point) throws Throwable
+    {
+        LOG.info("Before read: {}", point.getSignature());
+
+        Object ret = point.proceed();
+
+        LOG.info("After read: {}", point.getSignature());
+
+        AspectHelper.readCall += 1;
+
+        return ret;
+    }
+
     @Pointcut("execution(public * com.github.bednar.persistence.inject.service.Database.Transaction+.list(..))")
     public void list()
     {

@@ -7,4 +7,5 @@ public class AspectHelper
 {
     public static Integer saveCall = 0;
     public static Integer listCall = 0;
+    public static Integer readCall = 0;
 }
