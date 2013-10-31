@@ -1,24 +1,18 @@
 Security Library [![Build Status](https://api.travis-ci.org/bednar/security.png?branch=master)](https://travis-ci.org/bednar/security)
 ====
 
-# Using library
+## Using library
 
-TODO - how use aspect
+ - [] how use aspect
 
 ## Authorize Persist Events
 
-Persist events
-([save](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/SaveEvent.java),
+Persist events -
+[save](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/SaveEvent.java),
 [read](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/ReadEvent.java),
 [delete](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/DeleteEvent.java),
-[list](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/ListEvent.java))
-are protected by Authorize Subquery.
-
-### Read, List
-
-### Save
-
-### Delete
+[list](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/ListEvent.java)
+are protected by [authorization subquery](https://github.com/bednar/security/blob/master/src/main/java/com/github/bednar/security/contract/ResourceAuthorize.java).
 
 ## Maven Repository
 
@@ -28,7 +22,7 @@ are protected by Authorize Subquery.
         <url>http://nexus-bednar.rhcloud.com/nexus/content/groups/public/</url>
     </repository>
 
-# License
+## License
 
     Copyright (c) 2013, Jakub Bednář
     All rights reserved.
