@@ -11,13 +11,14 @@ Persist events
 ([save](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/SaveEvent.java),
 [read](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/ReadEvent.java),
 [delete](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/DeleteEvent.java),
-[list](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/ListEvent.java)) are protected by Resource Authorization Subquery.
+[list](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/ListEvent.java))
+are protected by Authorize Subquery.
 
-    import com.github.bednar.persistence.contract.Resource;
+### Read, List
 
-    public interface <R extends Resource> ResourceAuthorization<R>
-    {
-    }
+### Save
+
+### Delete
 
 ## Maven Repository
 
