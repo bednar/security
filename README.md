@@ -16,7 +16,7 @@ are protected by [authorization subquery](https://github.com/bednar/security/blo
 
 ### Example
 
-Can read, list (read) "Chat rooms" where subject is admin or subscriber.
+Can read, list *Chat rooms* where subject is admin or subscriber.
 
     @Nonnull
     public Criterion read(@Nonnull final Authenticable authenticable)
@@ -32,7 +32,7 @@ Can read, list (read) "Chat rooms" where subject is admin or subscriber.
         );
     }
 
-Can save (update) "Chat rooms" where subject is admin.
+Can save *Chat rooms* where subject is admin.
 
     @Nonnull
     public Criterion update(@Nonnull final Authenticable authenticable)
@@ -40,7 +40,13 @@ Can save (update) "Chat rooms" where subject is admin.
         return Restrictions.eq("admin", authenticable);
     }
 
-Can delete (delete) "Chat rooms" where subject is admin.
+Can delete *Chat rooms* where subject is admin.
+
+    @Nonnull
+    public Criterion delete(@Nonnull final Authenticable authenticable)
+    {
+        return Restrictions.eq("admin", authenticable);
+    }
 
 ## Maven Repository
 
