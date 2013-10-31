@@ -1,6 +1,20 @@
 Security Library [![Build Status](https://api.travis-ci.org/bednar/security.png?branch=master)](https://travis-ci.org/bednar/security)
 ====
 
+# Authorize Persist Events
+
+Persist events
+([save](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/SaveEvent.java),
+[read](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/ReadEvent.java),
+[delete](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/DeleteEvent.java),
+[list](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/ListEvent.java)) are protected by Resource Authorization Subquery.
+
+    import com.github.bednar.persistence.contract.Resource;
+
+    public interface <R extends Resource> ResourceAuthorization<R>
+    {
+    }
+
 ### Maven Repository
 
     <repository>
