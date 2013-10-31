@@ -16,11 +16,25 @@ are protected by [authorization subquery](https://github.com/bednar/security/blo
 
 ### Example
 
-Can read, list (read) "Chat rooms" where subject are admin or subscriber.
+Can read, list (read) "Chat rooms" where subject is admin or subscriber.
 
-Can save (update) "Chat rooms" where subject are admin.
+    @Nonnull
+    public Criterion read(@Nonnull final Authenticable authenticable)
+    {
+        DetachedCriteria subscribers = DetachedCriteria
+            .forClass(ChatRoomUserAssoc.class, "roomUser")
+            .setProjection(Property.forName("chat.id"))
+            .add(Restrictions.eq("user", authenticable));
 
-Can delete (delete) "Chat rooms" where subject are admin.
+        return Restrinctions.or(
+            Restrictions.eq("owner", authenticable),
+            Subqueries.propertyIn("id", subscribers)
+        );
+    }
+
+Can save (update) "Chat rooms" is subject are admin.
+
+Can delete (delete) "Chat rooms" is subject are admin.
 
 ## Maven Repository
 
