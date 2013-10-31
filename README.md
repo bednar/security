@@ -3,7 +3,7 @@ Security Library [![Build Status](https://api.travis-ci.org/bednar/security.png?
 
 ## Using library
 
- - [] how use aspect
+TODO: how use aspect
 
 ## Authorize Persist Events
 
@@ -13,6 +13,14 @@ Persist events -
 [delete](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/DeleteEvent.java),
 [list](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/ListEvent.java)
 are protected by [authorization subquery](https://github.com/bednar/security/blob/master/src/main/java/com/github/bednar/security/contract/ResourceAuthorize.java).
+
+### Example
+
+Can read, list (read) "Chat rooms" where subject are admin or subscriber.
+
+Can save (update) "Chat rooms" where subject are admin.
+
+Can delete (delete) "Chat rooms" where subject are admin.
 
 ## Maven Repository
 
