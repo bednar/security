@@ -127,9 +127,9 @@
     <repositories>
 
         <repository>
-            <id>snapshots-github</id>
-            <name>Snapshots GitHub</name>
-            <url>http://nexus-bednar.rhcloud.com/nexus/content/repositories/snapshots-github/</url>
+            <id>bednar-public</id>
+            <name>Bednar Public Repository</name>
+            <url>http://nexus-bednar.rhcloud.com/nexus/content/groups/public/</url>
         </repository>
 
     </repositories>
