@@ -27,14 +27,20 @@ Can read, list (read) "Chat rooms" where subject is admin or subscriber.
             .add(Restrictions.eq("user", authenticable));
 
         return Restrinctions.or(
-            Restrictions.eq("owner", authenticable),
+            Restrictions.eq("admin", authenticable),
             Subqueries.propertyIn("id", subscribers)
         );
     }
 
-Can save (update) "Chat rooms" is subject are admin.
+Can save (update) "Chat rooms" where subject is admin.
 
-Can delete (delete) "Chat rooms" is subject are admin.
+    @Nonnull
+    public Criterion update(@Nonnull final Authenticable authenticable)
+    {
+        return Restrictions.eq("admin", authenticable);
+    }
+
+Can delete (delete) "Chat rooms" where subject is admin.
 
 ## Maven Repository
 
