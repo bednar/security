@@ -7,10 +7,12 @@ package com.github.bednar.security.contract;
  */
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 import com.github.bednar.persistence.contract.Resource;
 import org.hibernate.criterion.Criterion;
 
+@ThreadSafe
 public interface ResourceAuthorize<R extends Resource>
 {
     /**
