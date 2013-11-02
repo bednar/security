@@ -1,5 +1,14 @@
 package com.github.bednar.security.aspect;
 
+import javax.annotation.Nonnull;
+import java.util.Map;
+import java.util.Set;
+
+import com.github.bednar.base.http.AppBootstrap;
+import com.github.bednar.base.utils.reflection.FluentReflection;
+import com.github.bednar.persistence.contract.Resource;
+import com.github.bednar.security.contract.ResourceAuthorize;
+import com.google.common.collect.Maps;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,6 +23,22 @@ import org.slf4j.LoggerFactory;
 public class PersistenceAspect
 {
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceAspect.class);
+
+    private Map<Class<? extends Resource>, ResourceAuthorize> authorizers = Maps.newHashMap();
+
+    public PersistenceAspect()
+    {
+        LOG.info("[init-resource-authorizers]");
+
+        for (Class<? extends ResourceAuthorize> authorizerType : findAuthorizerTypes())
+        {
+            ResourceAuthorize authorizer = createAuthorizer(authorizerType);
+
+            authorizers.put(authorizer.getType(), authorizer);
+        }
+
+        LOG.info("[{}][done]", authorizers.size());
+    }
 
     @Pointcut("execution(public * com.github.bednar.persistence.inject.service.Database.Transaction+.save(..))")
     public void save()
@@ -89,5 +114,34 @@ public class PersistenceAspect
         AspectHelper.listCall += 1;
 
         return ret;
+    }
+
+    @Nonnull
+    private ResourceAuthorize createAuthorizer(@Nonnull final Class<? extends ResourceAuthorize> authorizerType)
+    {
+        try
+        {
+            return authorizerType.newInstance();
+        }
+        catch (Exception e)
+        {
+            throw new PersitenceAspectException(e);
+        }
+    }
+
+    @Nonnull
+    private Set<Class<? extends ResourceAuthorize>> findAuthorizerTypes()
+    {
+         return FluentReflection
+                 .forPackage(AppBootstrap.SYMBOL_BASE_PACKAGE)
+                 .getSubTypesOf(ResourceAuthorize.class);
+    }
+
+    private class PersitenceAspectException extends RuntimeException
+    {
+        private PersitenceAspectException(@Nonnull final Throwable cause)
+        {
+            super(cause);
+        }
     }
 }
