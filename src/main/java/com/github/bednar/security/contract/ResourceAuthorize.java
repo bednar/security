@@ -19,7 +19,7 @@ public interface ResourceAuthorize
      * @return type of resource
      */
     @Nonnull
-    public Class<? extends Resource> getType();
+    Class<? extends Resource> getType();
 
     /**
      * @param authenticable logged subject
