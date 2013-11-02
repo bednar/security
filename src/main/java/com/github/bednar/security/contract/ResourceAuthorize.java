@@ -13,8 +13,14 @@ import com.github.bednar.persistence.contract.Resource;
 import org.hibernate.criterion.Criterion;
 
 @ThreadSafe
-public interface ResourceAuthorize<R extends Resource>
+public interface ResourceAuthorize
 {
+    /**
+     * @return type of resource
+     */
+    @Nonnull
+    public Class<? extends Resource> getType();
+
     /**
      * @param authenticable logged subject
      *
