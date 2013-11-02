@@ -16,7 +16,7 @@ are protected by [authorization subquery](https://github.com/bednar/security/blo
 
 ### Example
 
-Can read, list *Chat rooms* where subject is admin or subscriber.
+Can read (list) *Chat rooms* where subject is admin or is in subscribers.
 
     @Nonnull
     public Criterion read(@Nonnull final Authenticable authenticable)
