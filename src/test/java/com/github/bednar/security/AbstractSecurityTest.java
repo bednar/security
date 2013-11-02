@@ -20,12 +20,6 @@ public abstract class AbstractSecurityTest
 
     protected Injector injector;
 
-    @Before
-    public void before()
-    {
-        injector = AppContext.getInjector();
-    }
-
     @BeforeClass
     public static void beforeClass() throws Exception
     {
@@ -37,6 +31,12 @@ public abstract class AbstractSecurityTest
 
         SecurityInit.build()
                 .bindSecurityManager(embeddedJetty);
+    }
+
+    @Before
+    public void before()
+    {
+        injector = AppContext.getInjector();
     }
 
     @AfterClass
