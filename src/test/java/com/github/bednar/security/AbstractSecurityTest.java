@@ -3,6 +3,7 @@ package com.github.bednar.security;
 import com.github.bednar.base.http.AppContext;
 import com.github.bednar.base.inject.Injector;
 import com.github.bednar.test.EmbeddedJetty;
+import com.github.bednar.test.SecurityInit;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -22,7 +23,7 @@ public abstract class AbstractSecurityTest
     @Before
     public void before()
     {
-       injector = AppContext.getInjector();
+        injector = AppContext.getInjector();
     }
 
     @BeforeClass
@@ -33,11 +34,17 @@ public abstract class AbstractSecurityTest
                 .start();
 
         AppContext.initInjector(embeddedJetty.getServletContext());
+
+        SecurityInit.build()
+                .bindSecurityManager(embeddedJetty);
     }
 
     @AfterClass
     public static void afterClass() throws Exception
     {
+        SecurityInit.build()
+                .unBindSecurityManager();
+
         AppContext.clear();
 
         embeddedJetty.stop();
