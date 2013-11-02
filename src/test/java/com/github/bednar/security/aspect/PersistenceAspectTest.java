@@ -22,6 +22,8 @@ public class PersistenceAspectTest extends AbstractSecurityTest
     @Before
     public void before()
     {
+        super.before();
+
         dispatcher = injector.getInstance(Dispatcher.class);
     }
 

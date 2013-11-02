@@ -1,9 +1,10 @@
 package com.github.bednar.security;
 
-import com.github.bednar.base.http.AppBootstrap;
+import com.github.bednar.base.http.AppContext;
 import com.github.bednar.base.inject.Injector;
 import com.github.bednar.test.EmbeddedJetty;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 
 /**
@@ -15,7 +16,14 @@ public abstract class AbstractSecurityTest
      * Class scope
      */
     protected static EmbeddedJetty embeddedJetty;
-    protected static Injector injector;
+
+    protected Injector injector;
+
+    @Before
+    public void before()
+    {
+       injector = AppContext.getInjector();
+    }
 
     @BeforeClass
     public static void beforeClass() throws Exception
@@ -24,12 +32,14 @@ public abstract class AbstractSecurityTest
                 .webFragments(true)
                 .start();
 
-        injector = (Injector) embeddedJetty.getServletContext().getAttribute(AppBootstrap.INJECTOR_KEY);
+        AppContext.initInjector(embeddedJetty.getServletContext());
     }
 
     @AfterClass
     public static void afterClass() throws Exception
     {
+        AppContext.clear();
+
         embeddedJetty.stop();
     }
 }
