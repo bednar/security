@@ -33,7 +33,7 @@ public interface ResourceAuthorize
     /**
      * @param principal of logged subject
      *
-     * @return which resource can {@code principal} read
+     * @return which resources can {@code principal} read
      */
     @Nonnull
     Criterion read(@Nonnull final String principal);
@@ -41,7 +41,7 @@ public interface ResourceAuthorize
     /**
      * @param principal of logged subject
      *
-     * @return which resource can {@code principal} update
+     * @return which resources can {@code principal} update
      */
     @Nonnull
     Criterion update(@Nonnull final String principal);
@@ -49,7 +49,7 @@ public interface ResourceAuthorize
     /**
      * @param principal of logged subject
      *
-     * @return which resource can {@code principal} delete
+     * @return which resources can {@code principal} delete
      */
     @Nonnull
     Criterion delete(@Nonnull final String principal);
