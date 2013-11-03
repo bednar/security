@@ -56,9 +56,13 @@ public class PersistenceAspect
     public Object save(ProceedingJoinPoint point) throws Throwable
     {
         Resource resource   = (Resource) point.getArgs()[0];
-        Criterion criterion = authorizers.get(resource.getClass()).update(getPrincipal());
 
-        check(resource.getClass(), resource.getId(), criterion, "cannot-save");
+        if (authorizers.containsKey(resource.getClass()))
+        {
+            Criterion criterion = authorizers.get(resource.getClass()).update(getPrincipal());
+
+            check(resource.getClass(), resource.getId(), criterion, "cannot-save");
+        }
 
         return point.proceed();
     }
@@ -73,9 +77,13 @@ public class PersistenceAspect
     {
         Long key            = (Long) point.getArgs()[0];
         Class type          = (Class) point.getArgs()[1];
-        Criterion criterion = authorizers.get(type).read(getPrincipal());
 
-        check(type, key, criterion, "cannot-read");
+        if (authorizers.containsKey(type))
+        {
+            Criterion criterion = authorizers.get(type).read(getPrincipal());
+
+            check(type, key, criterion, "cannot-read");
+        }
 
         return point.proceed();
     }
@@ -89,9 +97,13 @@ public class PersistenceAspect
     public Object delete(ProceedingJoinPoint point) throws Throwable
     {
         Resource resource   = (Resource) point.getArgs()[0];
-        Criterion criterion = authorizers.get(resource.getClass()).delete(getPrincipal());
 
-        check(resource.getClass(), resource.getId(), criterion, "cannot-delete");
+        if (authorizers.containsKey(resource.getClass()))
+        {
+            Criterion criterion = authorizers.get(resource.getClass()).delete(getPrincipal());
+
+            check(resource.getClass(), resource.getId(), criterion, "cannot-delete");
+        }
 
         return point.proceed();
     }
