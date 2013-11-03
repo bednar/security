@@ -98,7 +98,13 @@ public class WebAuthenticatingRealm extends AuthenticatingRealm
             {
                 Object account = token.getPrincipal();
 
-                List<Resource> accounts = transaction.list(Restrictions.eq("account", account), type);
+                //noinspection unchecked
+                List<Resource> accounts = transaction
+                        .session()
+                        .createCriteria(type)
+                        .add(Restrictions.eq("account", account))
+                        .list();
+
                 if (accounts.isEmpty())
                 {
                     LOG.error("[empty-account][{}][{}]", account, accounts.size());

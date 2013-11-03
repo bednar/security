@@ -20,6 +20,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,7 +117,20 @@ public class PersistenceAspect
     @Around("list()")
     public Object list(ProceedingJoinPoint point) throws Throwable
     {
-        return point.proceed();
+        Criterion criterion = (Criterion) point.getArgs()[0];
+        Class type          = (Class) point.getArgs()[1];
+
+        if (authorizers.containsKey(type))
+        {
+            Criterion read = authorizers.get(type).read(getPrincipal());
+
+            criterion = Restrictions
+                    .conjunction()
+                    .add(criterion)
+                    .add(read);
+        }
+
+        return point.proceed(new Object[]{criterion, type});
     }
 
     private void check(@Nonnull final Class type, @Nonnull final Long key, @Nonnull final Criterion criterion, @Nonnull final String message)

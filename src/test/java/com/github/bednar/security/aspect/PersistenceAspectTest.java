@@ -1,7 +1,11 @@
 package com.github.bednar.security.aspect;
 
+import javax.annotation.Nonnull;
+import java.util.List;
+
 import com.github.bednar.base.event.Dispatcher;
 import com.github.bednar.persistence.event.DeleteEvent;
+import com.github.bednar.persistence.event.ListEvent;
 import com.github.bednar.persistence.event.ReadEvent;
 import com.github.bednar.persistence.event.SaveEvent;
 import com.github.bednar.persistence.inject.service.Database;
@@ -9,6 +13,7 @@ import com.github.bednar.security.AbstractSecurityTest;
 import com.github.bednar.security.resource.People;
 import com.github.bednar.test.SecurityInit;
 import org.apache.shiro.authz.AuthorizationException;
+import org.hibernate.criterion.Restrictions;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -130,6 +135,14 @@ public class PersistenceAspectTest extends AbstractSecurityTest
     @Test
     public void list()
     {
-        Assert.assertTrue(true);
+        ListEvent<People> events = new ListEvent<People>(Restrictions.not(Restrictions.eq("id", -1L)), People.class){
+            @Override
+            public void success(@Nonnull final List<People> peoples)
+            {
+                Assert.assertEquals(1, peoples.size());
+            }
+        };
+
+        dispatcher.publish(events);
     }
 }
