@@ -3,7 +3,6 @@ package com.github.bednar.security.resource;
 import javax.annotation.Nonnull;
 
 import com.github.bednar.persistence.contract.Resource;
-import com.github.bednar.security.contract.Authenticable;
 import com.github.bednar.security.contract.ResourceAuthorize;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -22,26 +21,26 @@ public class PeopleAuthorizer implements ResourceAuthorize
 
     @Nonnull
     @Override
-    public Criterion read(@Nonnull final Authenticable authenticable)
+    public Criterion read(@Nonnull final String principal)
     {
         //same people
-        return Restrictions.eq("account", authenticable.getAccount());
+        return Restrictions.eq("account", principal);
     }
 
     @Nonnull
     @Override
-    public Criterion update(@Nonnull final Authenticable authenticable)
+    public Criterion update(@Nonnull final String principal)
     {
         //same people
-        return Restrictions.eq("account", authenticable.getAccount());
+        return Restrictions.eq("account", principal);
     }
 
     @Nonnull
     @Override
-    public Criterion delete(@Nonnull final Authenticable authenticable)
+    public Criterion delete(@Nonnull final String principal)
     {
         //only devil can delete YOU ;)
-        if (authenticable.getAccount().equals("people3"))
+        if (principal.equals("people3"))
         {
             //all
             return Restrictions.not(Restrictions.eq("id", -1L));

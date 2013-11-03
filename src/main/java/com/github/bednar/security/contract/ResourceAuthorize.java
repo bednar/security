@@ -22,26 +22,26 @@ public interface ResourceAuthorize
     Class<? extends Resource> getType();
 
     /**
-     * @param authenticable logged subject
+     * @param principal of logged subject
      *
-     * @return which resource can {@code authenticable} read
+     * @return which resource can {@code principal} read
      */
     @Nonnull
-    Criterion read(@Nonnull final Authenticable authenticable);
+    Criterion read(@Nonnull final String principal);
 
     /**
-     * @param authenticable logged subject
+     * @param principal of logged subject
      *
-     * @return which resource can {@code authenticable} update
+     * @return which resource can {@code principal} update
      */
     @Nonnull
-    Criterion update(@Nonnull final Authenticable authenticable);
+    Criterion update(@Nonnull final String principal);
 
     /**
-     * @param authenticable logged subject
+     * @param principal of logged subject
      *
-     * @return which resource can {@code authenticable} delete
+     * @return which resource can {@code principal} delete
      */
     @Nonnull
-    Criterion delete(@Nonnull final Authenticable authenticable);
+    Criterion delete(@Nonnull final String principal);
 }
