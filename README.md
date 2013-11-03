@@ -19,15 +19,15 @@ are protected by [authorization subquery](https://github.com/bednar/security/blo
 Admin or Subscribers can read (list) *Chat rooms*.
 
     @Nonnull
-    public Criterion read(@Nonnull final Authenticable authenticable)
+    public Criterion read(@Nonnull final String principal)
     {
         DetachedCriteria subscribers = DetachedCriteria
             .forClass(ChatRoomUserAssoc.class, "roomUser")
             .setProjection(Property.forName("chat.id"))
-            .add(Restrictions.eq("user", authenticable));
+            .add(Restrictions.eq("user", principal));
 
         return Restrinctions.or(
-            Restrictions.eq("admin", authenticable),
+            Restrictions.eq("admin", principal),
             Subqueries.propertyIn("id", subscribers)
         );
     }
@@ -35,17 +35,17 @@ Admin or Subscribers can read (list) *Chat rooms*.
 Admin can save *Chat rooms*.
 
     @Nonnull
-    public Criterion update(@Nonnull final Authenticable authenticable)
+    public Criterion update(@Nonnull final String principal)
     {
-        return Restrictions.eq("admin", authenticable);
+        return Restrictions.eq("admin", principal);
     }
 
 Admin can delete *Chat rooms*.
 
     @Nonnull
-    public Criterion delete(@Nonnull final Authenticable authenticable)
+    public Criterion delete(@Nonnull final String principal)
     {
-        return Restrictions.eq("admin", authenticable);
+        return Restrictions.eq("admin", principal);
     }
 
 ## Maven Repository
