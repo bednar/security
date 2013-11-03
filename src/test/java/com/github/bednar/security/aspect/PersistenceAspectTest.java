@@ -2,15 +2,18 @@ package com.github.bednar.security.aspect;
 
 import com.github.bednar.base.event.Dispatcher;
 import com.github.bednar.persistence.event.DeleteEvent;
-import com.github.bednar.persistence.event.ListEvent;
 import com.github.bednar.persistence.event.ReadEvent;
 import com.github.bednar.persistence.event.SaveEvent;
+import com.github.bednar.persistence.inject.service.Database;
 import com.github.bednar.security.AbstractSecurityTest;
 import com.github.bednar.security.resource.People;
-import org.hibernate.criterion.Restrictions;
+import com.github.bednar.test.SecurityInit;
+import org.apache.shiro.authz.AuthorizationException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static com.github.bednar.test.AssertUtil.assertException;
 
 /**
  * @author Jakub Bednář (30/10/2013 16:49)
@@ -28,56 +31,105 @@ public class PersistenceAspectTest extends AbstractSecurityTest
     }
 
     @Test
-    public void save()
+    public void saveAuthorized()
     {
-        Integer calls = AspectHelper.saveCall;
+        Database.Transaction transaction = injector
+                .getInstance(Database.class)
+                .transaction();
 
-        People people = new People();
-        people.setAccount("save_aspect");
-        people.setPassword("my_super_secret");
+        People people = (People) transaction.session().byId(People.class).load(1L);
+
+        transaction.finish();
 
         dispatcher.publish(new SaveEvent(people));
-
-        Assert.assertEquals((Integer) (calls + 1), AspectHelper.saveCall);
     }
 
     @Test
-    public void read()
+    public void saveNotAuthorized()
     {
-        Integer calls = AspectHelper.readCall;
+        Database.Transaction transaction = injector
+                .getInstance(Database.class)
+                .transaction();
 
-        People people = new People();
-        people.setAccount("read_aspect");
-        people.setPassword("my_super_secret");
+        People people = (People) transaction.session().byId(People.class).load(2L);
 
-        dispatcher.publish(new SaveEvent(people));
-        dispatcher.publish(new ReadEvent<>(people.getId(), People.class));
+        transaction.finish();
 
-        Assert.assertEquals((Integer) (calls + 1), AspectHelper.readCall);
+        try
+        {
+            dispatcher.publish(new SaveEvent(people));
+        }
+        catch (Exception e)
+        {
+            assertException(AuthorizationException.class, e);
+        }
     }
 
     @Test
-    public void delete()
+    public void readAuthorized()
     {
-        Integer calls = AspectHelper.deleteCall;
+        dispatcher.publish(new ReadEvent<>(1L, People.class));
+    }
 
-        People people = new People();
-        people.setAccount("delete_aspect");
-        people.setPassword("my_super_secret");
+    @Test
+    public void readNotAuthorized()
+    {
+        try
+        {
+            dispatcher.publish(new ReadEvent<>(2L, People.class));
+        }
+        catch (Exception e)
+        {
+            assertException(AuthorizationException.class, e);
+        }
+    }
 
-        dispatcher.publish(new SaveEvent(people));
+    @Test
+    public void deleteAuthorized()
+    {
+        Database.Transaction transaction = injector
+                .getInstance(Database.class)
+                .transaction();
+
+        People people = (People) transaction.session().byId(People.class).load(4L);
+
+        transaction.finish();
+
+        SecurityInit
+                .build()
+                .destroySubject();
+
+        SecurityInit
+                .build()
+                .buildSubject("people3");
+
         dispatcher.publish(new DeleteEvent(people));
+    }
 
-        Assert.assertEquals((Integer) (calls + 1), AspectHelper.deleteCall);
+    @Test
+    public void deleteNotAuthorized()
+    {
+        Database.Transaction transaction = injector
+                .getInstance(Database.class)
+                .transaction();
+
+        People people = (People) transaction.session().byId(People.class).load(5L);
+
+        transaction.finish();
+
+        try
+        {
+            dispatcher.publish(new DeleteEvent(people));
+        }
+        catch (Exception e)
+        {
+            assertException(AuthorizationException.class, e);
+        }
     }
 
     @Test
     public void list()
     {
-        Integer calls = AspectHelper.listCall;
-
-        dispatcher.publish(new ListEvent<>(Restrictions.eq("id", -1L), People.class));
-
-        Assert.assertEquals((Integer) (calls + 1), AspectHelper.listCall);
+        Assert.assertTrue(true);
     }
 }

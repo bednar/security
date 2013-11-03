@@ -1,18 +1,25 @@
 package com.github.bednar.security.aspect;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.github.bednar.base.http.AppBootstrap;
+import com.github.bednar.base.http.AppContext;
 import com.github.bednar.base.utils.reflection.FluentReflection;
 import com.github.bednar.persistence.contract.Resource;
+import com.github.bednar.persistence.inject.service.Database;
 import com.github.bednar.security.contract.ResourceAuthorize;
 import com.google.common.collect.Maps;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.AuthorizationException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,15 +55,12 @@ public class PersistenceAspect
     @Around("save()")
     public Object save(ProceedingJoinPoint point) throws Throwable
     {
-        LOG.info("Before save: {}", point.getSignature());
+        Resource resource   = (Resource) point.getArgs()[0];
+        Criterion criterion = authorizers.get(resource.getClass()).update(getPrincipal());
 
-        Object ret = point.proceed();
+        check(resource.getClass(), resource.getId(), criterion, "cannot-save");
 
-        LOG.info("After save: {}", point.getSignature());
-
-        AspectHelper.saveCall += 1;
-
-        return ret;
+        return point.proceed();
     }
 
     @Pointcut("execution(public * com.github.bednar.persistence.inject.service.Database.Transaction+.read(..))")
@@ -67,15 +71,13 @@ public class PersistenceAspect
     @Around("read()")
     public Object read(ProceedingJoinPoint point) throws Throwable
     {
-        LOG.info("Before read: {}", point.getSignature());
+        Long key            = (Long) point.getArgs()[0];
+        Class type          = (Class) point.getArgs()[1];
+        Criterion criterion = authorizers.get(type).read(getPrincipal());
 
-        Object ret = point.proceed();
+        check(type, key, criterion, "cannot-read");
 
-        LOG.info("After read: {}", point.getSignature());
-
-        AspectHelper.readCall += 1;
-
-        return ret;
+        return point.proceed();
     }
 
     @Pointcut("execution(public * com.github.bednar.persistence.inject.service.Database.Transaction+.delete(..))")
@@ -86,15 +88,12 @@ public class PersistenceAspect
     @Around("delete()")
     public Object delete(ProceedingJoinPoint point) throws Throwable
     {
-        LOG.info("Before delete: {}", point.getSignature());
+        Resource resource   = (Resource) point.getArgs()[0];
+        Criterion criterion = authorizers.get(resource.getClass()).delete(getPrincipal());
 
-        Object ret = point.proceed();
+        check(resource.getClass(), resource.getId(), criterion, "cannot-delete");
 
-        LOG.info("After delete: {}", point.getSignature());
-
-        AspectHelper.deleteCall += 1;
-
-        return ret;
+        return point.proceed();
     }
 
     @Pointcut("execution(public * com.github.bednar.persistence.inject.service.Database.Transaction+.list(..))")
@@ -105,15 +104,37 @@ public class PersistenceAspect
     @Around("list()")
     public Object list(ProceedingJoinPoint point) throws Throwable
     {
-        LOG.info("Before list: {}", point.getSignature());
+        return point.proceed();
+    }
 
-        Object ret = point.proceed();
+    private void check(@Nonnull final Class type, @Nonnull final Long key, @Nonnull final Criterion criterion, @Nonnull final String message)
+    {
+        Database.Transaction transaction = AppContext
+                .getInjector()
+                .getInstance(Database.class)
+                .transaction();
 
-        LOG.info("After list: {}", point.getSignature());
+        //noinspection unchecked
+        List<Long> list = (List<Long>) transaction.session()
+                .createCriteria(type)
+                .add(criterion)
+                .setProjection(Projections.id())
+                .list();
 
-        AspectHelper.listCall += 1;
+        transaction.finish();
 
-        return ret;
+        if (!list.contains(key))
+        {
+            String mesage = String.format("[%s][%s][%s][%s]", message, type.getName(), key, getPrincipal());
+
+            throw new AuthorizationException(mesage);
+        }
+    }
+
+    @Nonnull
+    private String getPrincipal()
+    {
+        return SecurityUtils.getSubject().getPrincipal().toString();
     }
 
     @Nonnull
@@ -132,9 +153,9 @@ public class PersistenceAspect
     @Nonnull
     private Set<Class<? extends ResourceAuthorize>> findAuthorizerTypes()
     {
-         return FluentReflection
-                 .forPackage(AppBootstrap.SYMBOL_BASE_PACKAGE)
-                 .getSubTypesOf(ResourceAuthorize.class);
+        return FluentReflection
+                .forPackage(AppBootstrap.SYMBOL_BASE_PACKAGE)
+                .getSubTypesOf(ResourceAuthorize.class);
     }
 
     private class PersitenceAspectException extends RuntimeException
