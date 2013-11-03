@@ -24,8 +24,8 @@ public class PeopleAuthorizer implements ResourceAuthorize
     @Override
     public Criterion read(@Nonnull final Authenticable authenticable)
     {
-        //all
-        return Restrictions.not(Restrictions.eq("id", -1L));
+        //same people
+        return Restrictions.eq("account", authenticable.getAccount());
     }
 
     @Nonnull
@@ -41,7 +41,7 @@ public class PeopleAuthorizer implements ResourceAuthorize
     public Criterion delete(@Nonnull final Authenticable authenticable)
     {
         //only devil can delete YOU ;)
-        if (authenticable.getAccount().equals("devil"))
+        if (authenticable.getAccount().equals("people3"))
         {
             //all
             return Restrictions.not(Restrictions.eq("id", -1L));
