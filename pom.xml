@@ -82,6 +82,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.bednar</groupId>
             <artifactId>test</artifactId>
             <scope>test</scope>
