@@ -2,6 +2,7 @@ package com.github.bednar.security;
 
 import com.github.bednar.base.http.AppContext;
 import com.github.bednar.base.inject.Injector;
+import com.github.bednar.persistence.inject.service.Database;
 import com.github.bednar.test.EmbeddedJetty;
 import com.github.bednar.test.SecurityInit;
 import org.junit.After;
@@ -55,6 +56,13 @@ public abstract class AbstractSecurityTest
     @AfterClass
     public static void afterClass() throws Exception
     {
+        //Delete H2 database
+        AppContext.getInjector()
+                .getInstance(Database.class)
+                .transaction()
+                .doSQL("DROP ALL OBJECTS")
+                .finish();
+
         SecurityInit
                 .build()
                 .unBindSecurityManager();
