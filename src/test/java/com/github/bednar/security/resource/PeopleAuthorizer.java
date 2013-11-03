@@ -21,6 +21,14 @@ public class PeopleAuthorizer implements ResourceAuthorize
 
     @Nonnull
     @Override
+    public Criterion createNew(@Nonnull final String principal)
+    {
+        //only people3 can create new People
+        return Restrictions.eq("account", "people3");
+    }
+
+    @Nonnull
+    @Override
     public Criterion read(@Nonnull final String principal)
     {
         //same people

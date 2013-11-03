@@ -79,6 +79,12 @@ public class WebAuthenticatingRealm extends AuthenticatingRealm
         return delegate;
     }
 
+    @Nonnull
+    public Class getAuthenticableType()
+    {
+        return getDelegate().type;
+    }
+
     public static class DelegateAuthenticatingRealm extends org.apache.shiro.realm.AuthenticatingRealm
     {
         private static final Logger LOG = LoggerFactory.getLogger(DelegateAuthenticatingRealm.class);

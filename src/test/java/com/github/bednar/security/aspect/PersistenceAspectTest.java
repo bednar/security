@@ -71,6 +71,43 @@ public class PersistenceAspectTest extends AbstractSecurityTest
     }
 
     @Test
+    public void createNewAuthorized()
+    {
+        SecurityInit
+                .build()
+                .destroySubject();
+
+        SecurityInit
+                .build()
+                .buildSubject("people3");
+
+        People people = new People();
+
+        people.setAccount("createNewAuthorized");
+        people.setPassword("secret");
+
+        dispatcher.publish(new SaveEvent(people));
+    }
+
+    @Test
+    public void createNewNotAuthorized()
+    {
+        People people = new People();
+
+        people.setAccount("createNewNotAuthorized");
+        people.setPassword("secret");
+
+        try
+        {
+            dispatcher.publish(new SaveEvent(people));
+        }
+        catch (Exception e)
+        {
+            assertException(AuthorizationException.class, e);
+        }
+    }
+
+    @Test
     public void readAuthorized()
     {
         dispatcher.publish(new ReadEvent<>(1L, People.class));

@@ -11,9 +11,13 @@ import com.github.bednar.base.utils.reflection.FluentReflection;
 import com.github.bednar.persistence.contract.Resource;
 import com.github.bednar.persistence.inject.service.Database;
 import com.github.bednar.security.contract.ResourceAuthorize;
+import com.github.bednar.security.inject.WebAuthenticatingRealm;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.mgt.RealmSecurityManager;
+import org.apache.shiro.realm.Realm;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -33,6 +37,8 @@ public class PersistenceAspect
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceAspect.class);
 
     private Map<Class<? extends Resource>, ResourceAuthorize> authorizers = Maps.newHashMap();
+
+    private Class authenticableType;
 
     public PersistenceAspect()
     {
@@ -60,9 +66,16 @@ public class PersistenceAspect
 
         if (authorizers.containsKey(resource.getClass()))
         {
-            Criterion criterion = authorizers.get(resource.getClass()).update(getPrincipal());
+            if (resource.isNew())
+            {
+                checkNew(authorizers.get(resource.getClass()));
+            }
+            else
+            {
+                Criterion criterion = authorizers.get(resource.getClass()).update(getPrincipal());
 
-            check(resource.getClass(), resource.getId(), criterion, "cannot-save");
+                check(resource.getClass(), resource.getId(), criterion, "cannot-save");
+            }
         }
 
         return point.proceed();
@@ -157,10 +170,57 @@ public class PersistenceAspect
         }
     }
 
+    private void checkNew(@Nonnull final ResourceAuthorize resourceAuthorize)
+    {
+        Database.Transaction transaction = AppContext
+                .getInjector()
+                .getInstance(Database.class)
+                .transaction();
+
+        Criterion criterion = Restrictions
+                .conjunction()
+                .add(resourceAuthorize.createNew(getPrincipal()))
+                .add(Restrictions.eq("account", getPrincipal()));
+
+        boolean authorized = transaction
+                .session()
+                .createCriteria(getAuthenticableType())
+                .add(criterion)
+                .list().size() > 0;
+
+        if (!authorized)
+        {
+            String mesage = String.format("[cannot-create][%s][%s]", resourceAuthorize.getType(), getPrincipal());
+
+            throw new AuthorizationException(mesage);
+        }
+    }
+
     @Nonnull
     private String getPrincipal()
     {
         return SecurityUtils.getSubject().getPrincipal().toString();
+    }
+
+    @Nonnull
+    private Class getAuthenticableType()
+    {
+        if (authenticableType == null)
+        {
+            RealmSecurityManager securityManager = (RealmSecurityManager) SecurityUtils.getSecurityManager();
+
+            for (Realm realm : securityManager.getRealms())
+            {
+                if (realm instanceof WebAuthenticatingRealm)
+                {
+                    authenticableType = ((WebAuthenticatingRealm) realm).getAuthenticableType();
+                }
+            }
+        }
+
+        Preconditions.checkNotNull(authenticableType);
+
+        return authenticableType;
     }
 
     @Nonnull

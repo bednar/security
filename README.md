@@ -16,6 +16,14 @@ are protected by [authorization subquery](https://github.com/bednar/security/blo
 
 ### Example
 
+Admin can create new *Chat Room*
+
+    @Nonnull
+    public Criterion update(@Nonnull final String principal)
+    {
+        return Restrictions.eq("admin", principal);
+    }
+
 Admin or Subscribers can read (list) *Chat rooms*.
 
     @Nonnull
