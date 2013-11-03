@@ -14,6 +14,21 @@
             <column name="account" value="people2"/>
             <column name="password" value="$shiro1$SHA-256$500000$/DY7zSdSWyXV7KP4fpLUHQ==$/u/+oPLmG9C/ItlsJDon4ud1vRcwAuv+VWTfDI6YTJQ="/>
         </insert>
+        <insert tableName="People">
+            <column name="id" value="3"/>
+            <column name="account" value="people3"/>
+            <column name="password" value="$shiro1$SHA-256$500000$xCHmAiZIdWjs5rX3Gvjxqw==$71ZsdBq42SEKTXXPUk9oX2ntzyP2r+1n3uaHUof53Lw="/>
+        </insert>
+        <insert tableName="People">
+            <column name="id" value="4"/>
+            <column name="account" value="people4"/>
+            <column name="password" value="$shiro1$SHA-256$500000$cgB9uvK8B7xLjHeAGhFa6g==$kKp6Pt8unsABU7lyO8XHFvG6o3E25ntPSan3UDwOvQc="/>
+        </insert>
+        <insert tableName="People">
+            <column name="id" value="5"/>
+            <column name="account" value="people5"/>
+            <column name="password" value="$shiro1$SHA-256$500000$RDMiIjeW14h2eO2ZZseYaw==$iP8TzQuEzwxcbCzdxjYK0tGN/5+wXA6DAWn6KpDpsdQ="/>
+        </insert>
     </changeSet>
 
 </databaseChangeLog>
