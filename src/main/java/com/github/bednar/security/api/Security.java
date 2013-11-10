@@ -35,14 +35,14 @@ public class Security implements ApiResource
      */
     @POST
     @Path("/authenticateViaForm")
-    public void authenticateViaForm(final @Nonnull @Suspend AsynchronousResponse response,
-                                    final @Nullable @FormParam("username") String username,
-                                    final @Nullable @FormParam("password") String password)
+    public void authenticateViaForm(@Nonnull @Suspend final AsynchronousResponse response,
+                                    @Nullable @FormParam("username") final String username,
+                                    @Nullable @FormParam("password") final String password)
     {
         dispatcher.publish(new AuthenticateViaFormEvent(username, password)
         {
             @Override
-            public void success(final @Nonnull Boolean authentiacted)
+            public void success(@Nonnull final Boolean authentiacted)
             {
                 if (authentiacted)
                 {
@@ -61,12 +61,12 @@ public class Security implements ApiResource
      */
     @GET
     @Path("/unAuthenticate")
-    public void unAuthenticate(final @Nonnull @Suspend AsynchronousResponse response)
+    public void unAuthenticate(@Nonnull @Suspend final AsynchronousResponse response)
     {
         dispatcher.publish(new UnAuthenticateEvent()
         {
             @Override
-            public void success(final @Nonnull Void value)
+            public void success(@Nonnull final Void value)
             {
                 response.setResponse(Response.ok().build());
             }
@@ -78,12 +78,12 @@ public class Security implements ApiResource
      */
     @GET
     @Path("/isAuthenticated")
-    public void isAuthenticated(final @Nonnull @Suspend AsynchronousResponse response)
+    public void isAuthenticated(@Nonnull @Suspend final AsynchronousResponse response)
     {
         dispatcher.publish(new IsAuthenticatedEvent()
         {
             @Override
-            public void success(final @Nonnull Boolean isAuthenticated)
+            public void success(@Nonnull final Boolean isAuthenticated)
             {
                 if (isAuthenticated)
                 {
