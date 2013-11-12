@@ -27,7 +27,7 @@ Criterion for select [Authenticable Resource](https://github.com/bednar/security
     
 #### Update
 
-Criterion for select Resources which can `principal` update.
+Criterion for select `Resources` which can `principal` update.
 
     /**
      * Principal (unique user identifier) can update Chat Rooms where is admin.
@@ -40,7 +40,7 @@ Criterion for select Resources which can `principal` update.
     
 #### Read
 
-Criterion for select Resources which can `principal` read (list).
+Criterion for select `Resources` which can `principal` read (list).
 
     /**
      * Principal (unique user identifier) can read Chat Rooms where is admin or is subscribed to in.
@@ -59,8 +59,13 @@ Criterion for select Resources which can `principal` read (list).
         );
     }
 
-Admin can delete *Chat rooms*.
+#### Delete
 
+Criterion for select `Resources` which can `principal` delete.
+
+    /**
+     * Principal (unique user identifier) can delete Chat Rooms where is admin.
+     */
     @Nonnull
     public Criterion delete(@Nonnull final String principal)
     {
