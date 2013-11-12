@@ -17,7 +17,7 @@ are protected by [authorization subquery](https://github.com/bednar/security/blo
 Criterion for select [Authenticable Resource](https://github.com/bednar/security/blob/master/src/main/java/com/github/bednar/security/contract/Authenticable.java) which can create `Chat Room`.
 
     /**
-     * Only account with principal (unique user identifier)  `Admin` can create new `Chat Room`
+     * Only account with principal (unique user identifier)  Admin can create new Chat Room
      */
     @Nonnull
     public Criterion createNew(@Nonnull final String principal)
@@ -37,9 +37,14 @@ Criterion for select Resources which can `principal` update.
     {
         return Restrictions.eq("admin", principal);
     }
+    
+#### Read
 
-Admin of Chat Room or Subscribers of Chatcan read (list) *Chat rooms*.
+Criterion for select Resources which can `principal` read (list).
 
+    /**
+     * Principal (unique user identifier) can read Chat Rooms where is admin or is subscribed to in.
+     */
     @Nonnull
     public Criterion read(@Nonnull final String principal)
     {
