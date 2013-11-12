@@ -1,10 +1,6 @@
 Security Library [![Build Status](https://api.travis-ci.org/bednar/security.png?branch=master)](https://travis-ci.org/bednar/security)
 ====
 
-## Using library
-
-TODO: how use aspect
-
 ## Authorize Persist Events
 
 Persist events -
@@ -16,15 +12,20 @@ are protected by [authorization subquery](https://github.com/bednar/security/blo
 
 ### Example
 
-Admin can create new *Chat Room*
+#### Create New
 
+Criterion for select [Authenticable Resource](https://github.com/bednar/security/blob/master/src/main/java/com/github/bednar/security/contract/Authenticable.java) which can create `Chat Room`.
+
+    /**
+     * Account `Admin` can create new `Chat Room`
+     */
     @Nonnull
-    public Criterion update(@Nonnull final String principal)
+    public Criterion createNew(@Nonnull final String principal)
     {
-        return Restrictions.eq("admin", principal);
+        return Restrictions.eq("account", "admin");
     }
 
-Admin or Subscribers can read (list) *Chat rooms*.
+Admin of Chat Room or Subscribers of Chatcan read (list) *Chat rooms*.
 
     @Nonnull
     public Criterion read(@Nonnull final String principal)
