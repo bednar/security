@@ -10,9 +10,7 @@ Persist events -
 [list](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/ListEvent.java)
 are protected by [authorization subquery](https://github.com/bednar/security/blob/master/src/main/java/com/github/bednar/security/contract/ResourceAuthorize.java).
 
-### Example
-
-#### Create New
+### Create New
 
 Criterion for select [Authenticable Resource](https://github.com/bednar/security/blob/master/src/main/java/com/github/bednar/security/contract/Authenticable.java) which can create `Chat Room`.
 
@@ -25,7 +23,7 @@ Criterion for select [Authenticable Resource](https://github.com/bednar/security
         return Restrictions.eq("account", "admin");
     }
     
-#### Update
+### Update
 
 Criterion for select `Resources` which can `principal` update.
 
@@ -38,7 +36,7 @@ Criterion for select `Resources` which can `principal` update.
         return Restrictions.eq("admin", principal);
     }
     
-#### Read
+### Read
 
 Criterion for select `Resources` which can `principal` read (list).
 
@@ -59,7 +57,7 @@ Criterion for select `Resources` which can `principal` read (list).
         );
     }
 
-#### Delete
+### Delete
 
 Criterion for select `Resources` which can `principal` delete.
 
