@@ -89,8 +89,8 @@ public class PersistenceAspect
     @Around("read()")
     public Object read(ProceedingJoinPoint point) throws Throwable
     {
-        Long key            = (Long) point.getArgs()[0];
-        Class type          = (Class) point.getArgs()[1];
+        Long key    = (Long) point.getArgs()[0];
+        Class type  = (Class) point.getArgs()[1];
 
         if (authorizers.containsKey(type))
         {
@@ -110,13 +110,14 @@ public class PersistenceAspect
     @Around("delete()")
     public Object delete(ProceedingJoinPoint point) throws Throwable
     {
-        Resource resource   = (Resource) point.getArgs()[0];
+        Long key    = (Long) point.getArgs()[0];
+        Class type  = (Class) point.getArgs()[1];
 
-        if (authorizers.containsKey(resource.getClass()))
+        if (authorizers.containsKey(type))
         {
-            Criterion criterion = authorizers.get(resource.getClass()).delete(getPrincipal());
+            Criterion criterion = authorizers.get(type).delete(getPrincipal());
 
-            check(resource.getClass(), resource.getId(), criterion, "cannot-delete");
+            check(type, key, criterion, "cannot-delete");
         }
 
         return point.proceed();
