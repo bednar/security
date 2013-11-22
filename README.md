@@ -1,10 +1,6 @@
 Security Library [![Build Status](https://api.travis-ci.org/bednar/security.png?branch=master)](https://travis-ci.org/bednar/security)
 ====
 
-## Using library
-
-TODO: how use aspect
-
 ## Authorize Persist Events
 
 Persist events -
@@ -14,18 +10,39 @@ Persist events -
 [list](https://github.com/bednar/persistence/blob/master/src/main/java/com/github/bednar/persistence/event/ListEvent.java)
 are protected by [authorization subquery](https://github.com/bednar/security/blob/master/src/main/java/com/github/bednar/security/contract/ResourceAuthorize.java).
 
-### Example
+### Create New
 
-Admin can create new *Chat Room*
+Criterion for select [Authenticable Resource](https://github.com/bednar/security/blob/master/src/main/java/com/github/bednar/security/contract/Authenticable.java) which can create `Chat Room`.
 
+    /**
+     * Only account with principal (unique user identifier)  Admin can create new Chat Room
+     */
+    @Nonnull
+    public Criterion createNew(@Nonnull final String principal)
+    {
+        return Restrictions.eq("account", "admin");
+    }
+    
+### Update
+
+Criterion for select `Resources` which can `principal` update.
+
+    /**
+     * Principal (unique user identifier) can update Chat Rooms where is admin.
+     */
     @Nonnull
     public Criterion update(@Nonnull final String principal)
     {
         return Restrictions.eq("admin", principal);
     }
+    
+### Read
 
-Admin or Subscribers can read (list) *Chat rooms*.
+Criterion for select `Resources` which can `principal` read (list).
 
+    /**
+     * Principal (unique user identifier) can read Chat Rooms where is admin or is subscribed to in.
+     */
     @Nonnull
     public Criterion read(@Nonnull final String principal)
     {
@@ -40,16 +57,13 @@ Admin or Subscribers can read (list) *Chat rooms*.
         );
     }
 
-Admin can save *Chat rooms*.
+### Delete
 
-    @Nonnull
-    public Criterion update(@Nonnull final String principal)
-    {
-        return Restrictions.eq("admin", principal);
-    }
+Criterion for select `Resources` which can `principal` delete.
 
-Admin can delete *Chat rooms*.
-
+    /**
+     * Principal (unique user identifier) can delete Chat Rooms where is admin.
+     */
     @Nonnull
     public Criterion delete(@Nonnull final String principal)
     {
