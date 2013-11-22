@@ -1,5 +1,6 @@
-Security Library [![Build Status](https://api.travis-ci.org/bednar/security.png?branch=master)](https://travis-ci.org/bednar/security)
+Security Library
 ====
+[![Build Status](https://api.travis-ci.org/bednar/security.png?branch=master)](https://travis-ci.org/bednar/security) [![Coverage Status](https://coveralls.io/repos/bednar/security/badge.png)](https://coveralls.io/r/bednar/security)
 
 ## Authorize Persist Events
 
