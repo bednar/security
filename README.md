@@ -70,6 +70,26 @@ Criterion for select `Resources` which can `principal` delete.
     {
         return Restrictions.eq("admin", principal);
     }
+    
+## Security Annotation for API Resource
+
+### RequiresAuthentication
+
+[RequiresAuthentication](http://shiro.apache.org/static/current/apidocs/org/apache/shiro/authz/annotation/RequiresAuthentication.html) 
+from [Shiro](http://shiro.apache.org) can be use for annotate API Resource method which require authenticated Subject.
+
+    @Path("/account")
+    public class AccountResource implements ApiResource
+    {
+        @GET
+        @Path("/me")
+        @RequiresAuthentication
+        public void me(@Nonnull @Suspend final AsynchronousResponse response)
+        {
+            //Subject is authenticated => generate regular response
+            response.setResponse(...);
+        }
+    }
 
 ## Maven Repository
 
