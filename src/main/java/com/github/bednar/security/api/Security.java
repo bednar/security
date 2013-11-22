@@ -14,6 +14,7 @@ import com.github.bednar.base.event.Dispatcher;
 import com.github.bednar.security.event.AuthenticateViaFormEvent;
 import com.github.bednar.security.event.IsAuthenticatedEvent;
 import com.github.bednar.security.event.UnAuthenticateEvent;
+import com.wordnik.swagger.annotations.Api;
 import org.jboss.resteasy.annotations.Suspend;
 import org.jboss.resteasy.spi.AsynchronousResponse;
 
@@ -21,6 +22,7 @@ import org.jboss.resteasy.spi.AsynchronousResponse;
  * @author Jakub Bednář (31/08/2013 10:32 AM)
  */
 @Path("/security")
+@Api(value = "Security API", description = "API for authentication and security interaction.")
 public class Security implements ApiResource
 {
     @Inject
