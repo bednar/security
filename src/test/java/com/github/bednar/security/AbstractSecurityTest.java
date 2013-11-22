@@ -1,10 +1,13 @@
 package com.github.bednar.security;
 
+import javax.annotation.Nonnull;
+
 import com.github.bednar.base.http.AppContext;
 import com.github.bednar.base.inject.Injector;
 import com.github.bednar.persistence.inject.service.Database;
 import com.github.bednar.test.EmbeddedJetty;
 import com.github.bednar.test.SecurityInit;
+import com.google.common.base.Preconditions;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -72,5 +75,26 @@ public abstract class AbstractSecurityTest
 
         embeddedJetty
                 .stop();
+    }
+
+    @Nonnull
+    protected String getResourcePath()
+    {
+        return "";
+    }
+
+    @Nonnull
+    protected String urlPath(@Nonnull final String context)
+    {
+        return urlPath(getResourcePath(), context);
+    }
+
+    @Nonnull
+    protected String urlPath(@Nonnull final String resource, @Nonnull final String context)
+    {
+        Preconditions.checkNotNull(resource);
+        Preconditions.checkNotNull(context);
+
+        return embeddedJetty.getURL() + "api/" + resource + "/" + context;
     }
 }

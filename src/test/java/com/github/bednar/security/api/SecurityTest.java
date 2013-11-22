@@ -21,6 +21,13 @@ import org.junit.Test;
  */
 public class SecurityTest extends AbstractSecurityTest
 {
+    @Nonnull
+    @Override
+    protected String getResourcePath()
+    {
+        return "security";
+    }
+
     @Test
     public void authenticateViaFormSuccess() throws ExecutionException, InterruptedException, UnsupportedEncodingException
     {
@@ -150,11 +157,5 @@ public class SecurityTest extends AbstractSecurityTest
                 .get();
 
         Assert.assertEquals(401, isAuthenticated.getStatus());
-    }
-
-    @Nonnull
-    private String urlPath(final @Nonnull String context)
-    {
-        return embeddedJetty.getURL() + "api/security/" + context;
     }
 }
