@@ -44,6 +44,7 @@ public class SecurityTest extends AbstractSecurityTest
                 .get();
 
         Assert.assertEquals(200, response.getStatus());
+        Assert.assertEquals("{}", response.readEntity(String.class));
     }
 
     @Test
@@ -62,6 +63,7 @@ public class SecurityTest extends AbstractSecurityTest
                 .get();
 
         Assert.assertEquals(401, response.getStatus());
+        Assert.assertEquals("{}", response.readEntity(String.class));
     }
 
     @Test
