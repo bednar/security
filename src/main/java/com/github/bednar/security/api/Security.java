@@ -39,10 +39,6 @@ public class Security implements ApiResource
     @Inject
     private Dispatcher dispatcher;
 
-    /**
-     * @param username Form parameter with id="username"
-     * @param password Form parameter with id="password"
-     */
     @POST
     @Path("authenticateViaForm")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
