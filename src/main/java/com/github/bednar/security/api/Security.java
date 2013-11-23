@@ -21,7 +21,7 @@ import org.jboss.resteasy.spi.AsynchronousResponse;
 /**
  * @author Jakub Bednář (31/08/2013 10:32 AM)
  */
-@Path("/security")
+@Path("security")
 @Api(value = "Security API", description = "API for authentication and security interaction.")
 public class Security implements ApiResource
 {
@@ -36,7 +36,7 @@ public class Security implements ApiResource
      * @param password Form parameter with id="password"
      */
     @POST
-    @Path("/authenticateViaForm")
+    @Path("authenticateViaForm")
     public void authenticateViaForm(@Nonnull @Suspend final AsynchronousResponse response,
                                     @Nullable @FormParam("username") final String username,
                                     @Nullable @FormParam("password") final String password)
@@ -62,7 +62,7 @@ public class Security implements ApiResource
      * If actual session is authenticated, than invalidate session and unauthenticated it. Always return HTTP 200 OK.
      */
     @GET
-    @Path("/unAuthenticate")
+    @Path("unAuthenticate")
     public void unAuthenticate(@Nonnull @Suspend final AsynchronousResponse response)
     {
         dispatcher.publish(new UnAuthenticateEvent()
@@ -79,7 +79,7 @@ public class Security implements ApiResource
      * Return HTTP 200 OK response if actual server session is authenticated and HTTP 401 UNAUTHORIZED if not.
      */
     @GET
-    @Path("/isAuthenticated")
+    @Path("isAuthenticated")
     public void isAuthenticated(@Nonnull @Suspend final AsynchronousResponse response)
     {
         dispatcher.publish(new IsAuthenticatedEvent()
