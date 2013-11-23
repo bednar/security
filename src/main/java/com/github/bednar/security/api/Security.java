@@ -33,7 +33,8 @@ import org.jboss.resteasy.spi.AsynchronousResponse;
 @Produces("application/json")
 @Api(
         value = "Authentication",
-        description = "API for authentication subject. Supported authentication method: HTML Form.")
+        description = "API for authentication subject. Supported authentication method: HTML Form.",
+        position = 10)
 public class Security implements ApiResource
 {
     @Inject
