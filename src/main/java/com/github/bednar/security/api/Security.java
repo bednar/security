@@ -82,11 +82,13 @@ public class Security implements ApiResource
         });
     }
 
-    /**
-     * If actual session is authenticated, than invalidate session and unauthenticated it. Always return HTTP 200 OK.
-     */
     @GET
     @Path("unAuthenticate")
+    @ApiOperation(
+            position = 2,
+            value = "If actual session is authenticated, than invalidate session and unauthenticated it." +
+                    " Always return HTTP 200 OK.")
+    @ApiResponse(code = 200, message = "{}")
     public void unAuthenticate(@Nonnull @Suspend final AsynchronousResponse response)
     {
         dispatcher.publish(new UnAuthenticateEvent()
@@ -94,18 +96,19 @@ public class Security implements ApiResource
             @Override
             public void success(@Nonnull final Void value)
             {
-                response.setResponse(Response.ok().build());
+                response.setResponse(Response.ok("{}").build());
             }
         });
     }
 
-    /**
-     * Return HTTP 200 OK response if actual server session is authenticated and HTTP 401 UNAUTHORIZED if not.
-     */
     @GET
     @Path("isAuthenticated")
-    @Consumes("application/json")
-    @Produces("application/json")
+    @ApiOperation(
+            position = 3,
+            value = "Return HTTP 200 OK response if actual session is authenticated or HTTP 401 UNAUTHORIZED if not.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "{}"),
+            @ApiResponse(code = 401, message = "{}")})
     public void isAuthenticated(@Nonnull @Suspend final AsynchronousResponse response)
     {
         dispatcher.publish(new IsAuthenticatedEvent()
@@ -113,14 +116,17 @@ public class Security implements ApiResource
             @Override
             public void success(@Nonnull final Boolean isAuthenticated)
             {
+                Response.ResponseBuilder builder;
                 if (isAuthenticated)
                 {
-                    response.setResponse(Response.ok().build());
+                    builder = Response.ok();
                 }
                 else
                 {
-                    response.setResponse(Response.status(Response.Status.UNAUTHORIZED).build());
+                    builder = Response.status(Response.Status.UNAUTHORIZED);
                 }
+
+                response.setResponse(builder.entity("{}").build());
             }
         });
     }

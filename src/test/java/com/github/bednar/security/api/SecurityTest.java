@@ -77,6 +77,7 @@ public class SecurityTest extends AbstractSecurityTest
                 .get();
 
         Assert.assertEquals(401, response.getStatus());
+        Assert.assertEquals("{}", response.readEntity(String.class));
     }
 
     @Test
@@ -106,6 +107,7 @@ public class SecurityTest extends AbstractSecurityTest
                 .get();
 
         Assert.assertEquals(200, isAuthenticated.getStatus());
+        Assert.assertEquals("{}", isAuthenticated.readEntity(String.class));
     }
 
     @Test
@@ -119,6 +121,7 @@ public class SecurityTest extends AbstractSecurityTest
                 .get();
 
         Assert.assertEquals(200, unAuthenticate.getStatus());
+        Assert.assertEquals("{}", unAuthenticate.readEntity(String.class));
     }
 
     @Test
