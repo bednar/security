@@ -1,6 +1,7 @@
 package com.github.bednar.security.aspect;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 import com.github.bednar.base.event.Dispatcher;
@@ -8,6 +9,7 @@ import com.github.bednar.persistence.event.DeleteEvent;
 import com.github.bednar.persistence.event.ListEvent;
 import com.github.bednar.persistence.event.ReadEvent;
 import com.github.bednar.persistence.event.SaveEvent;
+import com.github.bednar.persistence.event.UniqueEvent;
 import com.github.bednar.persistence.inject.service.Database;
 import com.github.bednar.security.AbstractSecurityTest;
 import com.github.bednar.security.resource.People;
@@ -172,7 +174,8 @@ public class PersistenceAspectTest extends AbstractSecurityTest
     @Test
     public void list()
     {
-        ListEvent<People> events = new ListEvent<People>(Restrictions.not(Restrictions.eq("id", -1L)), People.class){
+        ListEvent<People> events = new ListEvent<People>(Restrictions.not(Restrictions.eq("id", -1L)), People.class)
+        {
             @Override
             public void success(@Nonnull final List<People> peoples)
             {
@@ -181,5 +184,33 @@ public class PersistenceAspectTest extends AbstractSecurityTest
         };
 
         dispatcher.publish(events);
+    }
+
+    @Test
+    public void uniqueWithPermission()
+    {
+        dispatcher.publish(new UniqueEvent<People>(Restrictions.eq("account", "people1"), People.class)
+        {
+            @Override
+            public void success(@Nullable final People people)
+            {
+                Assert.assertNotNull(people);
+                Assert.assertEquals((Object) 1L, people.getId());
+                Assert.assertEquals("people1", people.getAccount());
+            }
+        });
+    }
+
+    @Test
+    public void uniqueWithoutPermission()
+    {
+        dispatcher.publish(new UniqueEvent<People>(Restrictions.eq("account", "people2"), People.class)
+        {
+            @Override
+            public void success(@Nullable final People value)
+            {
+                Assert.assertNull(value);
+            }
+        });
     }
 }

@@ -147,6 +147,17 @@ public class PersistenceAspect
         return point.proceed(new Object[]{criterion, type});
     }
 
+    @Pointcut("execution(public * com.github.bednar.persistence.inject.service.Database.Transaction+.unique(..))")
+    public void unique()
+    {
+    }
+
+    @Around("unique()")
+    public Object unique(ProceedingJoinPoint point) throws Throwable
+    {
+        return list(point);
+    }
+
     private void check(@Nonnull final Class type, @Nonnull final Long key, @Nonnull final Criterion criterion, @Nonnull final String message)
     {
         Database.Transaction transaction = AppContext
