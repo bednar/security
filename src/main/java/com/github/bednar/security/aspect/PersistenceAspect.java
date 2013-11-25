@@ -62,7 +62,7 @@ public class PersistenceAspect
     @Around("save()")
     public Object save(ProceedingJoinPoint point) throws Throwable
     {
-        Resource resource   = (Resource) point.getArgs()[0];
+        Resource resource = (Resource) point.getArgs()[0];
 
         if (authorizers.containsKey(resource.getClass()))
         {
