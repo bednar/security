@@ -22,10 +22,11 @@ import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.Realm;
-import org.hibernate.criterion.Restrictions;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.github.bednar.security.contract.AuthenticableRestrictions.BY_ACCOUNT;
 
 /**
  * @author Jakub Bednář (14/09/2013 10:29 AM)
@@ -102,13 +103,13 @@ public class WebAuthenticatingRealm extends AuthenticatingRealm
         {
             try (Database.Transaction transaction = database.transaction())
             {
-                Object account = token.getPrincipal();
+                String account = token.getPrincipal().toString();
 
                 //noinspection unchecked
                 List<Resource> accounts = transaction
                         .session()
                         .createCriteria(type)
-                        .add(Restrictions.eq("account", account))
+                        .add(BY_ACCOUNT(account))
                         .list();
 
                 if (accounts.isEmpty())

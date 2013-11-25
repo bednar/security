@@ -9,7 +9,6 @@ import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.web.util.WebUtils;
 import org.grouplens.grapht.Context;
 import org.grouplens.grapht.Module;
@@ -53,7 +52,7 @@ public class SecurityModule implements Module
         //Authorization Realm
         WebAuthenticatingRealm realm = new WebAuthenticatingRealm(servletContext, securityManager);
         context
-                .bind(AuthenticatingRealm.class)
+                .bind(WebAuthenticatingRealm.class)
                 .to(realm);
     }
 }
