@@ -81,7 +81,7 @@ public class WebAuthenticatingRealm extends AuthenticatingRealm
     }
 
     @Nonnull
-    public Class getAuthenticableType()
+    public Class<Resource> getAuthenticableType()
     {
         return getDelegate().type;
     }
