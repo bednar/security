@@ -13,7 +13,7 @@ import com.github.bednar.security.contract.Authenticable;
 @Entity
 public class People extends Resource implements Authenticable
 {
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, unique = true)
     private String account;
 
     @Column(nullable = false, length = 500)
