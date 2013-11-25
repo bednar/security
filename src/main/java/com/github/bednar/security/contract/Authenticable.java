@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 public interface Authenticable
 {
     /**
-     * 'account' must be column identifier in database.
+     * 'account' must be column identifier in database and must be unique.
      *
      * @return account unique identifier
      */
