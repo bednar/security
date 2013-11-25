@@ -35,7 +35,7 @@ import org.jboss.resteasy.spi.AsynchronousResponse;
         value = "Authentication",
         description = "API for authentication subject. Supported authentication method: HTML Form.",
         position = 10)
-public class Security implements ApiResource
+public class SecurityApi implements ApiResource
 {
     @Inject
     private Dispatcher dispatcher;

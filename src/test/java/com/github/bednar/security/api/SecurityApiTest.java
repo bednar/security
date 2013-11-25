@@ -19,7 +19,7 @@ import org.junit.Test;
 /**
  * @author Jakub Bednář (31/08/2013 3:18 PM)
  */
-public class SecurityTest extends AbstractSecurityTest
+public class SecurityApiTest extends AbstractSecurityTest
 {
     @Nonnull
     @Override
