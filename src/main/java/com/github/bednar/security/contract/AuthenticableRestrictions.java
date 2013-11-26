@@ -3,6 +3,7 @@ package com.github.bednar.security.contract;
 import javax.annotation.Nonnull;
 
 import com.google.common.base.Preconditions;
+import org.apache.shiro.SecurityUtils;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.StringType;
@@ -14,6 +15,19 @@ public final class AuthenticableRestrictions
 {
     private AuthenticableRestrictions()
     {
+    }
+
+    /**
+     * {@code account} is actual {@link org.apache.shiro.subject.Subject#getPrincipal() Subject principal}
+     *
+     * @see #BY_ACCOUNT(String)
+     */
+    @Nonnull
+    public static Criterion BY_ACCOUNT()
+    {
+        String principal = SecurityUtils.getSubject().getPrincipal().toString();
+
+        return BY_ACCOUNT(principal);
     }
 
     /**
