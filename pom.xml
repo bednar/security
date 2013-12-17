@@ -21,11 +21,6 @@
 
         <!-- Bednar -->
 
-        <!--<dependency>-->
-            <!--<groupId>com.github.bednar</groupId>-->
-            <!--<artifactId>base</artifactId>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>com.github.bednar</groupId>
             <artifactId>persistence</artifactId>
